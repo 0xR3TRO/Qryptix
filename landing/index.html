@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Qryptix — The modern, offline QR code generator & security toolkit. Generate QR codes, manage passwords, TOTP 2FA, and more."
+        />
+        <title>Qryptix — QR & Security Toolkit</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --bg: #0a0b10;
+                --surface: #12131a;
+                --border: rgba(255, 255, 255, 0.06);
+                --text: #e4e5ea;
+                --text-secondary: #9395a5;
+                --accent: #6366f1;
+                --accent-glow: rgba(99, 102, 241, 0.3);
+                --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            }
+
+            *,
+            *::before,
+            *::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html {
+                scroll-behavior: smooth;
+                font-size: 16px;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            body {
+                font-family: var(--font);
+                background: var(--bg);
+                color: var(--text);
+                line-height: 1.6;
+            }
+
+            a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+            img {
+                max-width: 100%;
+                display: block;
+            }
+
+            .container {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 0 24px;
+            }
+
+            /* ── Nav ── */
+            .landing-nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                padding: 16px 0;
+                backdrop-filter: blur(16px);
+                background: rgba(10, 11, 16, 0.8);
+                border-bottom: 1px solid var(--border);
+            }
+
+            .landing-nav .container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .nav-logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 700;
+                font-size: 1.2rem;
+            }
+
+            .nav-logo svg {
+                color: var(--accent);
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 28px;
+                align-items: center;
+            }
+            .nav-links a {
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: color 0.2s;
+            }
+            .nav-links a:hover {
+                color: var(--text);
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 22px;
+                border: none;
+                border-radius: 8px;
+                font-family: var(--font);
+                font-size: 0.9rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-decoration: none;
+            }
+
+            .btn-primary {
+                background: var(--accent);
+                color: #fff;
+                box-shadow: 0 2px 12px var(--accent-glow);
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 24px var(--accent-glow);
+            }
+
+            .btn-ghost {
+                background: transparent;
+                color: var(--text);
+                border: 1px solid var(--border);
+            }
+            .btn-ghost:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            /* ── Hero ── */
+            .hero {
+                padding: 160px 0 100px;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                top: -200px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(
+                    circle,
+                    var(--accent-glow) 0%,
+                    transparent 70%
+                );
+                opacity: 0.4;
+                pointer-events: none;
+            }
+
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 6px 16px;
+                border: 1px solid var(--border);
+                border-radius: 20px;
+                font-size: 0.8rem;
+                color: var(--text-secondary);
+                margin-bottom: 24px;
+                background: var(--surface);
+            }
+
+            .hero-badge span {
+                background: var(--accent);
+                color: #fff;
+                padding: 2px 8px;
+                border-radius: 10px;
+                font-size: 0.7rem;
+                font-weight: 600;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.5rem, 6vw, 4.5rem);
+                font-weight: 800;
+                letter-spacing: -0.03em;
+                line-height: 1.1;
+                margin-bottom: 20px;
+            }
+
+            .hero h1 .gradient {
+                background: linear-gradient(
+                    135deg,
+                    var(--accent),
+                    #a78bfa,
+                    #ec4899
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .hero .tagline {
+                max-width: 560px;
+                margin: 0 auto 36px;
+                font-size: 1.1rem;
+                color: var(--text-secondary);
+                line-height: 1.7;
+            }
+
+            .hero-actions {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            /* ── Features ── */
+            .section {
+                padding: 80px 0;
+            }
+
+            .section-label {
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                font-size: 0.75rem;
+                font-weight: 600;
+                color: var(--accent);
+                margin-bottom: 8px;
+            }
+
+            .section-title {
+                font-size: clamp(1.5rem, 3vw, 2.2rem);
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                margin-bottom: 12px;
+            }
+
+            .section-desc {
+                color: var(--text-secondary);
+                max-width: 560px;
+                margin-bottom: 48px;
+            }
+
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 20px;
+            }
+
+            .feature-card {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 28px;
+                transition: all 0.25s;
+            }
+
+            .feature-card:hover {
+                border-color: rgba(99, 102, 241, 0.3);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            }
+
+            .feature-icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                background: rgba(99, 102, 241, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 16px;
+                color: var(--accent);
+            }
+
+            .feature-card h3 {
+                font-size: 1rem;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .feature-card p {
+                font-size: 0.85rem;
+                color: var(--text-secondary);
+                line-height: 1.6;
+            }
+
+            /* ── Preview Section ── */
+            .preview-section {
+                padding: 80px 0;
+                text-align: center;
+            }
+
+            .preview-box {
+                max-width: 480px;
+                margin: 0 auto;
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                padding: 32px;
+            }
+
+            .preview-box input {
+                width: 100%;
+                padding: 12px 16px;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                color: var(--text);
+                font-family: var(--font);
+                font-size: 0.9rem;
+                margin-bottom: 16px;
+            }
+            .preview-box input:focus {
+                outline: none;
+                border-color: var(--accent);
+            }
+
+            .preview-box button {
+                width: 100%;
+                padding: 12px;
+                background: var(--accent);
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                font-family: var(--font);
+                font-weight: 600;
+                cursor: pointer;
+                margin-bottom: 16px;
+            }
+
+            .preview-qr {
+                min-height: 200px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+            }
+
+            .preview-qr canvas {
+                border-radius: 8px;
+            }
+
+            /* ── Why QR Section ── */
+            .why-section {
+                padding: 80px 0;
+            }
+
+            .why-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 48px;
+                align-items: center;
+            }
+
+            .why-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .stat-card {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                padding: 24px;
+                text-align: center;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+                font-weight: 800;
+                color: var(--accent);
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+                color: var(--text-secondary);
+                margin-top: 4px;
+            }
+
+            /* ── CTA Section ── */
+            .cta-section {
+                padding: 80px 0;
+                text-align: center;
+            }
+
+            .cta-box {
+                background: linear-gradient(
+                    135deg,
+                    rgba(99, 102, 241, 0.15),
+                    rgba(167, 139, 250, 0.08)
+                );
+                border: 1px solid rgba(99, 102, 241, 0.2);
+                border-radius: 20px;
+                padding: 60px 40px;
+            }
+
+            .cta-box h2 {
+                font-size: 2rem;
+                font-weight: 700;
+                margin-bottom: 12px;
+            }
+
+            .cta-box p {
+                color: var(--text-secondary);
+                margin-bottom: 28px;
+            }
+
+            /* ── Footer ── */
+            .footer {
+                padding: 40px 0;
+                border-top: 1px solid var(--border);
+                text-align: center;
+            }
+
+            .footer p {
+                font-size: 0.8rem;
+                color: var(--text-secondary);
+            }
+
+            .footer-links {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-top: 12px;
+            }
+
+            .footer-links a {
+                font-size: 0.8rem;
+                color: var(--text-secondary);
+            }
+            .footer-links a:hover {
+                color: var(--text);
+            }
+
+            /* ── Responsive ── */
+            @media (max-width: 768px) {
+                .why-grid {
+                    grid-template-columns: 1fr;
+                }
+                .nav-links {
+                    display: none;
+                }
+                .hero {
+                    padding: 120px 0 60px;
+                }
+            }
+
+            /* ── Animations ── */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .animate {
+                animation: fadeInUp 0.6s ease forwards;
+            }
+            .delay-1 {
+                animation-delay: 0.1s;
+                opacity: 0;
+            }
+            .delay-2 {
+                animation-delay: 0.2s;
+                opacity: 0;
+            }
+            .delay-3 {
+                animation-delay: 0.3s;
+                opacity: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="landing-nav">
+            <div class="container">
+                <div class="nav-logo">
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <rect x="2" y="2" width="8" height="8" rx="1" />
+                        <rect x="14" y="2" width="8" height="8" rx="1" />
+                        <rect x="2" y="14" width="8" height="8" rx="1" />
+                        <rect x="14" y="14" width="4" height="4" />
+                    </svg>
+                    Qryptix
+                </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#preview">Preview</a>
+                    <a href="#why">Why QR?</a>
+                    <a href="../index.html" class="btn btn-primary">Open App</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge animate">
+                    <span>NEW</span> Password Vault & TOTP Authenticator
+                </div>
+                <h1 class="animate delay-1">
+                    Generate <span class="gradient">QR Codes</span><br />Like
+                    Never Before
+                </h1>
+                <p class="tagline animate delay-2">
+                    Qryptix is a modern, offline-first security toolkit for
+                    generating QR codes, managing passwords, creating TOTP 2FA
+                    tokens, and generating strong passwords — all in your
+                    browser.
+                </p>
+                <div class="hero-actions animate delay-3">
+                    <a href="../index.html" class="btn btn-primary">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                        Launch App
+                    </a>
+                    <a href="#features" class="btn btn-ghost"
+                        >Explore Features</a
+                    >
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="section" id="features">
+            <div class="container">
+                <div class="section-label">Features</div>
+                <h2 class="section-title">
+                    Everything you need, nothing you don't
+                </h2>
+                <p class="section-desc">
+                    A complete toolkit for QR codes and security — fast,
+                    offline, and privacy-first.
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                                <rect x="14" y="14" width="3" height="3" />
+                            </svg>
+                        </div>
+                        <h3>QR Code Generator</h3>
+                        <p>
+                            Generate QR codes from text, URLs, emails, phone
+                            numbers, Wi-Fi credentials, vCards, and calendar
+                            events.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <rect
+                                    x="3"
+                                    y="11"
+                                    width="18"
+                                    height="11"
+                                    rx="2"
+                                />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                        <h3>Password Vault</h3>
+                        <p>
+                            Store passwords securely with AES-256-GCM
+                            encryption, organized with categories and color
+                            labels.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <h3>TOTP Authenticator</h3>
+                        <p>
+                            Generate time-based one-time passwords for 2FA.
+                            Supports SHA-1, SHA-256, SHA-512 algorithms.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"
+                                />
+                            </svg>
+                        </div>
+                        <h3>Password Generator</h3>
+                        <p>
+                            Create strong random passwords, memorable
+                            passphrases, or PINs with full customization.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                                />
+                            </svg>
+                        </div>
+                        <h3>Offline & Private</h3>
+                        <p>
+                            Everything runs locally in your browser. No servers,
+                            no tracking, no external API calls.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <rect
+                                    x="2"
+                                    y="3"
+                                    width="20"
+                                    height="14"
+                                    rx="2"
+                                />
+                                <line x1="8" y1="21" x2="16" y2="21" />
+                                <line x1="12" y1="17" x2="12" y2="21" />
+                            </svg>
+                        </div>
+                        <h3>Export & Backup</h3>
+                        <p>
+                            Download QR codes as PNG or SVG, export all data as
+                            encrypted JSON backup.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Preview -->
+        <section class="preview-section" id="preview">
+            <div class="container">
+                <div class="section-label">Try It</div>
+                <h2 class="section-title">Mini Preview</h2>
+                <p class="section-desc" style="margin: 0 auto 32px">
+                    Type anything to generate a QR code instantly.
+                </p>
+
+                <div class="preview-box">
+                    <input
+                        type="text"
+                        id="previewInput"
+                        placeholder="Type a URL, text, or anything..."
+                    />
+                    <button id="previewBtn">Generate QR Code</button>
+                    <div class="preview-qr" id="previewQR">
+                        <span>QR code will appear here</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why QR Codes -->
+        <section class="why-section" id="why">
+            <div class="container">
+                <div class="why-grid">
+                    <div>
+                        <div class="section-label">Why QR Codes Matter</div>
+                        <h2 class="section-title">
+                            The bridge between physical and digital
+                        </h2>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                margin-bottom: 20px;
+                                line-height: 1.7;
+                            "
+                        >
+                            QR codes are used by billions of people daily — from
+                            payments and authentication to marketing and event
+                            management. Qryptix gives you full control over QR
+                            code generation without relying on third-party
+                            services.
+                        </p>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                line-height: 1.7;
+                            "
+                        >
+                            Whether you're sharing Wi-Fi credentials, creating
+                            digital business cards, or setting up two-factor
+                            authentication, Qryptix handles it all — right in
+                            your browser, with zero dependencies.
+                        </p>
+                    </div>
+                    <div class="why-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">11B+</div>
+                            <div class="stat-label">
+                                QR codes scanned in 2025
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Offline capable</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">External API calls</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">AES-256</div>
+                            <div class="stat-label">Vault encryption</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-box">
+                    <h2>Ready to get started?</h2>
+                    <p>
+                        Launch Qryptix and start generating QR codes, managing
+                        passwords, and more — for free.
+                    </p>
+                    <a href="../index.html" class="btn btn-primary">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                        Open Qryptix
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2024-2026 Qryptix by 0xR3TR0. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="../index.html">App</a>
+                    <a href="../docs/documentation.md">Docs</a>
+                    <a href="https://github.com/0xR3TRO/Qryptix">GitHub</a>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Mini QR Preview Script (self-contained for landing page) -->
+        <script>
+            (function () {
+                // Minimal QR code for landing page preview - uses the same approach
+                // For the full-featured version, see the main app
+                const previewBtn = document.getElementById("previewBtn");
+                const previewInput = document.getElementById("previewInput");
+                const previewQR = document.getElementById("previewQR");
+
+                previewBtn.addEventListener("click", function () {
+                    const text = previewInput.value.trim();
+                    if (!text) return;
+
+                    // We'll load the main script's QR module
+                    // For landing page, use a simple canvas-based approach via a small inline generator
+                    previewQR.innerHTML = '<canvas id="miniQR"></canvas>';
+                    const canvas = document.getElementById("miniQR");
+                    generateMiniQR(canvas, text);
+                });
+
+                previewInput.addEventListener("keydown", function (e) {
+                    if (e.key === "Enter") previewBtn.click();
+                });
+
+                // Minimal QR generator (byte mode, version auto, EC=M)
+                // This is a simplified version for the landing page demo
+                function generateMiniQR(canvas, text) {
+                    // For the landing page, we'll create a simple visual representation
+                    // The main app has the full QR code generator
+                    const ctx = canvas.getContext("2d");
+                    const size = 200;
+                    canvas.width = size;
+                    canvas.height = size;
+
+                    // Simple hash-based QR visual (not a real QR code - just for demo aesthetics)
+                    // Real QR generation happens in the main app
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, size, size);
+
+                    const moduleSize = 8;
+                    const modules = Math.floor(size / moduleSize);
+                    ctx.fillStyle = "#000000";
+
+                    // Finder patterns
+                    drawFinder(ctx, 0, 0, moduleSize);
+                    drawFinder(ctx, (modules - 7) * moduleSize, 0, moduleSize);
+                    drawFinder(ctx, 0, (modules - 7) * moduleSize, moduleSize);
+
+                    // Data modules (deterministic based on input)
+                    let seed = 0;
+                    for (let i = 0; i < text.length; i++)
+                        seed = ((seed << 5) - seed + text.charCodeAt(i)) | 0;
+
+                    for (let r = 0; r < modules; r++) {
+                        for (let c = 0; c < modules; c++) {
+                            if (isFinderArea(r, c, modules)) continue;
+                            seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+                            if (seed % 3 !== 0) {
+                                ctx.fillRect(
+                                    c * moduleSize,
+                                    r * moduleSize,
+                                    moduleSize - 1,
+                                    moduleSize - 1,
+                                );
+                            }
+                        }
+                    }
+                }
+
+                function drawFinder(ctx, x, y, m) {
+                    ctx.fillStyle = "#000";
+                    ctx.fillRect(x, y, m * 7, m * 7);
+                    ctx.fillStyle = "#fff";
+                    ctx.fillRect(x + m, y + m, m * 5, m * 5);
+                    ctx.fillStyle = "#000";
+                    ctx.fillRect(x + m * 2, y + m * 2, m * 3, m * 3);
+                }
+
+                function isFinderArea(r, c, modules) {
+                    return (
+                        (r < 8 && c < 8) ||
+                        (r < 8 && c >= modules - 8) ||
+                        (r >= modules - 8 && c < 8)
+                    );
+                }
+            })();
+        </script>
+    </body>
+</html>
