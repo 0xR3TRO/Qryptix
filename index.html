@@ -1,31 +1,1529 @@
-<!--Website created by 0xR3TR0. All rights reserved.--> 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- meta tag's -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html lang="en" data-theme="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Qryptix — Advanced QR Code Generator, Password Vault, TOTP Authenticator & Password Generator. Works offline."
+        />
+        <title>Qryptix — QR & Security Toolkit</title>
+        <link rel="stylesheet" href="assets/styles.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- Toast container -->
+        <div id="toast-container" aria-live="polite"></div>
 
-    <!-- style -->
-    <link rel="stylesheet" href="Directories/style.css">
+        <!-- Sidebar Navigation -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+            role="navigation"
+            aria-label="Main navigation"
+        >
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <rect x="2" y="2" width="8" height="8" rx="1" />
+                        <rect x="14" y="2" width="8" height="8" rx="1" />
+                        <rect x="2" y="14" width="8" height="8" rx="1" />
+                        <rect x="14" y="14" width="4" height="4" rx="0.5" />
+                        <rect x="20" y="14" width="2" height="2" />
+                        <rect x="14" y="20" width="2" height="2" />
+                        <rect x="20" y="20" width="2" height="2" />
+                    </svg>
+                    <span class="logo-text">Qryptix</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <button
+                    class="nav-btn active"
+                    data-tab="qr-generator"
+                    aria-label="QR Generator"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                        <rect x="14" y="14" width="3" height="3" />
+                        <line x1="20" y1="14" x2="20" y2="14.01" />
+                        <line x1="14" y1="20" x2="14" y2="20.01" />
+                        <line x1="20" y1="20" x2="20" y2="20.01" />
+                    </svg>
+                    <span>QR Generator</span>
+                </button>
+                <button
+                    class="nav-btn"
+                    data-tab="vault"
+                    aria-label="Password Vault"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        <circle cx="12" cy="16" r="1" />
+                    </svg>
+                    <span>Vault</span>
+                </button>
+                <button
+                    class="nav-btn"
+                    data-tab="totp"
+                    aria-label="TOTP Authenticator"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>TOTP</span>
+                </button>
+                <button
+                    class="nav-btn"
+                    data-tab="password-gen"
+                    aria-label="Password Generator"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"
+                        />
+                    </svg>
+                    <span>Password Gen</span>
+                </button>
+                <button class="nav-btn" data-tab="history" aria-label="History">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                        <path d="M4.93 4.93l4.24 4.24" />
+                    </svg>
+                    <span>History</span>
+                </button>
+                <button
+                    class="nav-btn"
+                    data-tab="settings"
+                    aria-label="Settings"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                        />
+                    </svg>
+                    <span>Settings</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button
+                    class="theme-toggle"
+                    id="themeToggle"
+                    aria-label="Toggle theme"
+                >
+                    <svg
+                        class="sun-icon"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="12" cy="12" r="5" />
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                        />
+                    </svg>
+                    <svg
+                        class="moon-icon"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                        />
+                    </svg>
+                </button>
+                <span class="version">v2.0</span>
+            </div>
+        </aside>
 
-    <!-- title -->
-    <title>QR Code Generator</title>
-</head>
-<body>
-    
-    <div class="container">
-        <p>Enter your text or URL</p>
-        <input type="text" placeholder="Text or URL" id="qrText">
+        <!-- Mobile Header -->
+        <header class="mobile-header" id="mobileHeader">
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="logo-text">Qryptix</div>
+            <button
+                class="theme-toggle mobile-theme"
+                id="mobileThemeToggle"
+                aria-label="Toggle theme"
+            >
+                <svg
+                    class="sun-icon"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <circle cx="12" cy="12" r="5" />
+                    <path
+                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                    />
+                </svg>
+                <svg
+                    class="moon-icon"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+            </button>
+        </header>
 
-        <div id="imgBox">
-            <img src="" id="qrImage">
-        </div>
+        <!-- Overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <button onclick="generateQR()">Generate QR Code</button>
-    </div>
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- ==================== QR GENERATOR TAB ==================== -->
+            <section class="tab-content active" id="tab-qr-generator">
+                <div class="tab-header">
+                    <h1>QR Code Generator</h1>
+                    <p class="subtitle">
+                        Generate high-quality QR codes for any data type
+                    </p>
+                </div>
 
-    <!-- script -->
-    <script src="Directories/script.js"></script>
-</body>
+                <div class="qr-layout">
+                    <!-- Left: Input Panel -->
+                    <div class="panel input-panel">
+                        <div class="data-type-selector">
+                            <label class="field-label">Data Type</label>
+                            <div
+                                class="type-chips"
+                                role="radiogroup"
+                                aria-label="QR data type"
+                            >
+                                <button
+                                    class="chip active"
+                                    data-type="auto"
+                                    role="radio"
+                                    aria-checked="true"
+                                >
+                                    Auto Detect
+                                </button>
+                                <button
+                                    class="chip"
+                                    data-type="url"
+                                    role="radio"
+                                    aria-checked="false"
+                                >
+                                    URL
+                                </button>
+                                <button
+                                    class="chip"
+                                    data-type="text"
+                                    role="radio"
+                                    aria-checked="false"
+                                >
+                                    Text
+                                </button>
+                                <button
+                                    class="chip"
+                                    data-type="email"
+                                    role="radio"
+                                    aria-checked="false"
+                                >
+                                    Email
+                                </button>
+                                <button
+                                    class="chip"
+                                    data-type="phone"
+                                    role="radio"
+                                    aria-checked="false"
+                                >
+                                    Phone
+                                </button>
+                                <button
+                                    class="chip"
+                                    data-type="wifi"
+                                    role="radio"
+                                    aria-checked="false"
+                                >
+                                    Wi-Fi
+                                </button>
+                                <button
+                                    class="chip"
+                                    data-type="vcard"
+                                    role="radio"
+                                    aria-checked="false"
+                                >
+                                    vCard
+                                </button>
+                                <button
+                                    class="chip"
+                                    data-type="event"
+                                    role="radio"
+                                    aria-checked="false"
+                                >
+                                    Event
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic input fields -->
+                        <div class="input-fields" id="qrInputFields">
+                            <!-- Auto / Text / URL -->
+                            <div class="field-group" id="field-auto">
+                                <label for="qrDataInput" class="field-label"
+                                    >Content</label
+                                >
+                                <textarea
+                                    id="qrDataInput"
+                                    class="input"
+                                    rows="3"
+                                    placeholder="Enter text, URL, email, phone..."
+                                    aria-label="QR code content"
+                                ></textarea>
+                                <div
+                                    class="detected-type"
+                                    id="detectedType"
+                                ></div>
+                            </div>
+                            <!-- Email fields -->
+                            <div class="field-group hidden" id="field-email">
+                                <label class="field-label">Email Address</label>
+                                <input
+                                    type="email"
+                                    class="input"
+                                    id="emailTo"
+                                    placeholder="recipient@example.com"
+                                />
+                                <label class="field-label">Subject</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="emailSubject"
+                                    placeholder="Subject line"
+                                />
+                                <label class="field-label">Body</label>
+                                <textarea
+                                    class="input"
+                                    id="emailBody"
+                                    rows="2"
+                                    placeholder="Email body"
+                                ></textarea>
+                            </div>
+                            <!-- Phone fields -->
+                            <div class="field-group hidden" id="field-phone">
+                                <label class="field-label">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    class="input"
+                                    id="phoneNumber"
+                                    placeholder="+1 234 567 890"
+                                />
+                            </div>
+                            <!-- Wi-Fi fields -->
+                            <div class="field-group hidden" id="field-wifi">
+                                <label class="field-label"
+                                    >SSID (Network Name)</label
+                                >
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="wifiSSID"
+                                    placeholder="MyNetwork"
+                                />
+                                <label class="field-label">Password</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="wifiPassword"
+                                    placeholder="Network password"
+                                />
+                                <label class="field-label">Encryption</label>
+                                <select class="input" id="wifiEncryption">
+                                    <option value="WPA">WPA/WPA2</option>
+                                    <option value="WEP">WEP</option>
+                                    <option value="nopass">None</option>
+                                </select>
+                                <label class="checkbox-label"
+                                    ><input type="checkbox" id="wifiHidden" />
+                                    Hidden network</label
+                                >
+                            </div>
+                            <!-- vCard fields -->
+                            <div class="field-group hidden" id="field-vcard">
+                                <label class="field-label">First Name</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="vcardFirstName"
+                                    placeholder="John"
+                                />
+                                <label class="field-label">Last Name</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="vcardLastName"
+                                    placeholder="Doe"
+                                />
+                                <label class="field-label">Organization</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="vcardOrg"
+                                    placeholder="Company Inc."
+                                />
+                                <label class="field-label">Phone</label>
+                                <input
+                                    type="tel"
+                                    class="input"
+                                    id="vcardPhone"
+                                    placeholder="+1 234 567 890"
+                                />
+                                <label class="field-label">Email</label>
+                                <input
+                                    type="email"
+                                    class="input"
+                                    id="vcardEmail"
+                                    placeholder="john@example.com"
+                                />
+                                <label class="field-label">Website</label>
+                                <input
+                                    type="url"
+                                    class="input"
+                                    id="vcardUrl"
+                                    placeholder="https://example.com"
+                                />
+                            </div>
+                            <!-- Event fields -->
+                            <div class="field-group hidden" id="field-event">
+                                <label class="field-label">Event Title</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="eventTitle"
+                                    placeholder="Meeting"
+                                />
+                                <label class="field-label">Location</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="eventLocation"
+                                    placeholder="Conference Room A"
+                                />
+                                <label class="field-label">Start</label>
+                                <input
+                                    type="datetime-local"
+                                    class="input"
+                                    id="eventStart"
+                                />
+                                <label class="field-label">End</label>
+                                <input
+                                    type="datetime-local"
+                                    class="input"
+                                    id="eventEnd"
+                                />
+                                <label class="field-label">Description</label>
+                                <textarea
+                                    class="input"
+                                    id="eventDesc"
+                                    rows="2"
+                                    placeholder="Event details"
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <!-- QR Customization -->
+                        <div class="customization-section">
+                            <h3 class="section-title">Customization</h3>
+                            <div class="custom-grid">
+                                <div class="custom-item">
+                                    <label class="field-label"
+                                        >Error Correction</label
+                                    >
+                                    <select
+                                        class="input"
+                                        id="qrErrorLevel"
+                                        aria-label="Error correction level"
+                                    >
+                                        <option value="L">Low (7%)</option>
+                                        <option value="M" selected>
+                                            Medium (15%)
+                                        </option>
+                                        <option value="Q">
+                                            Quartile (25%)
+                                        </option>
+                                        <option value="H">High (30%)</option>
+                                    </select>
+                                </div>
+                                <div class="custom-item">
+                                    <label class="field-label">Size (px)</label>
+                                    <input
+                                        type="range"
+                                        id="qrSize"
+                                        min="128"
+                                        max="1024"
+                                        value="400"
+                                        step="32"
+                                        class="range-input"
+                                    />
+                                    <span class="range-value" id="qrSizeVal"
+                                        >400</span
+                                    >
+                                </div>
+                                <div class="custom-item">
+                                    <label class="field-label"
+                                        >Foreground</label
+                                    >
+                                    <input
+                                        type="color"
+                                        id="qrFgColor"
+                                        value="#000000"
+                                        class="color-input"
+                                    />
+                                </div>
+                                <div class="custom-item">
+                                    <label class="field-label"
+                                        >Background</label
+                                    >
+                                    <input
+                                        type="color"
+                                        id="qrBgColor"
+                                        value="#ffffff"
+                                        class="color-input"
+                                    />
+                                </div>
+                                <div class="custom-item full-width">
+                                    <label class="field-label"
+                                        >Center Logo (optional)</label
+                                    >
+                                    <input
+                                        type="file"
+                                        id="qrLogo"
+                                        accept="image/*"
+                                        class="file-input"
+                                    />
+                                    <button
+                                        class="btn btn-sm btn-ghost"
+                                        id="removeLogo"
+                                        style="display: none"
+                                    >
+                                        Remove Logo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="actions-row">
+                            <button class="btn btn-primary" id="generateBtn">
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <rect x="3" y="3" width="7" height="7" />
+                                    <rect x="14" y="3" width="7" height="7" />
+                                    <rect x="3" y="14" width="7" height="7" />
+                                    <rect x="14" y="14" width="3" height="3" />
+                                </svg>
+                                Generate QR Code
+                            </button>
+                            <button class="btn btn-ghost" id="clearBtn">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Preview Panel -->
+                    <div class="panel preview-panel">
+                        <h3 class="section-title">Preview</h3>
+                        <div
+                            class="qr-preview-container"
+                            id="qrPreviewContainer"
+                        >
+                            <div class="qr-placeholder" id="qrPlaceholder">
+                                <svg
+                                    width="64"
+                                    height="64"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1"
+                                    opacity="0.3"
+                                >
+                                    <rect x="3" y="3" width="7" height="7" />
+                                    <rect x="14" y="3" width="7" height="7" />
+                                    <rect x="3" y="14" width="7" height="7" />
+                                    <rect x="14" y="14" width="3" height="3" />
+                                </svg>
+                                <p>Your QR code will appear here</p>
+                            </div>
+                            <canvas
+                                id="qrCanvas"
+                                style="display: none"
+                            ></canvas>
+                        </div>
+                        <div
+                            class="export-actions"
+                            id="exportActions"
+                            style="display: none"
+                        >
+                            <button
+                                class="btn btn-sm btn-primary"
+                                id="downloadPNG"
+                            >
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                                    />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                PNG
+                            </button>
+                            <button
+                                class="btn btn-sm btn-primary"
+                                id="downloadSVG"
+                            >
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                                    />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                SVG
+                            </button>
+                            <button
+                                class="btn btn-sm btn-ghost"
+                                id="copyClipboard"
+                            >
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <rect
+                                        x="9"
+                                        y="9"
+                                        width="13"
+                                        height="13"
+                                        rx="2"
+                                    />
+                                    <path
+                                        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                                    />
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Batch Generator -->
+                <div class="panel batch-panel">
+                    <h3 class="section-title">Batch Generator</h3>
+                    <p class="subtitle">
+                        Enter one item per line to generate multiple QR codes at
+                        once.
+                    </p>
+                    <textarea
+                        id="batchInput"
+                        class="input"
+                        rows="4"
+                        placeholder="https://example.com&#10;Hello World&#10;+1234567890"
+                    ></textarea>
+                    <button class="btn btn-primary" id="batchGenerate">
+                        Generate All
+                    </button>
+                    <div class="batch-results" id="batchResults"></div>
+                </div>
+            </section>
+
+            <!-- ==================== VAULT TAB ==================== -->
+            <section class="tab-content" id="tab-vault">
+                <div class="tab-header">
+                    <h1>Password Vault</h1>
+                    <p class="subtitle">
+                        Securely store and manage your passwords locally
+                    </p>
+                </div>
+
+                <!-- Vault Lock Screen -->
+                <div class="vault-lock" id="vaultLock">
+                    <div class="lock-icon">
+                        <svg
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </div>
+                    <h2 id="vaultLockTitle">Unlock Vault</h2>
+                    <p id="vaultLockSubtitle">
+                        Enter your master password to access the vault
+                    </p>
+                    <div class="vault-lock-form">
+                        <input
+                            type="password"
+                            class="input"
+                            id="masterPassword"
+                            placeholder="Master password"
+                            autocomplete="off"
+                        />
+                        <input
+                            type="password"
+                            class="input hidden"
+                            id="masterPasswordConfirm"
+                            placeholder="Confirm master password"
+                            autocomplete="off"
+                        />
+                        <button class="btn btn-primary" id="unlockVaultBtn">
+                            Unlock
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vault Content (hidden until unlocked) -->
+                <div class="vault-content hidden" id="vaultContent">
+                    <div class="vault-toolbar">
+                        <div class="search-box">
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                            <input
+                                type="text"
+                                class="input"
+                                id="vaultSearch"
+                                placeholder="Search vault..."
+                            />
+                        </div>
+                        <div class="vault-toolbar-actions">
+                            <button class="btn btn-primary" id="addEntryBtn">
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                                Add Entry
+                            </button>
+                            <button class="btn btn-ghost" id="lockVaultBtn">
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <rect
+                                        x="3"
+                                        y="11"
+                                        width="18"
+                                        height="11"
+                                        rx="2"
+                                    />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                                Lock
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add/Edit Entry Modal -->
+                    <div class="modal-overlay hidden" id="entryModal">
+                        <div class="modal">
+                            <div class="modal-header">
+                                <h3 id="entryModalTitle">Add Entry</h3>
+                                <button
+                                    class="modal-close"
+                                    id="closeEntryModal"
+                                    aria-label="Close"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label class="field-label">Title</label>
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="entryTitle"
+                                    placeholder="e.g. GitHub"
+                                />
+                                <label class="field-label"
+                                    >Username / Email</label
+                                >
+                                <input
+                                    type="text"
+                                    class="input"
+                                    id="entryUsername"
+                                    placeholder="user@example.com"
+                                />
+                                <label class="field-label">Password</label>
+                                <div class="password-field">
+                                    <input
+                                        type="password"
+                                        class="input"
+                                        id="entryPassword"
+                                        placeholder="••••••••"
+                                    />
+                                    <button
+                                        class="btn btn-icon"
+                                        id="toggleEntryPw"
+                                        aria-label="Show password"
+                                    >
+                                        <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                                            />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        class="btn btn-icon"
+                                        id="genEntryPw"
+                                        aria-label="Generate password"
+                                        title="Generate password"
+                                    >
+                                        <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <label class="field-label">URL</label>
+                                <input
+                                    type="url"
+                                    class="input"
+                                    id="entryUrl"
+                                    placeholder="https://github.com"
+                                />
+                                <label class="field-label">Category</label>
+                                <select class="input" id="entryCategory">
+                                    <option value="general">General</option>
+                                    <option value="social">Social Media</option>
+                                    <option value="finance">Finance</option>
+                                    <option value="work">Work</option>
+                                    <option value="email">Email</option>
+                                    <option value="development">
+                                        Development
+                                    </option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <label class="field-label">Color Label</label>
+                                <div class="color-labels">
+                                    <button
+                                        class="color-dot active"
+                                        data-color="#6366f1"
+                                        style="background: #6366f1"
+                                        aria-label="Purple"
+                                    ></button>
+                                    <button
+                                        class="color-dot"
+                                        data-color="#ef4444"
+                                        style="background: #ef4444"
+                                        aria-label="Red"
+                                    ></button>
+                                    <button
+                                        class="color-dot"
+                                        data-color="#f59e0b"
+                                        style="background: #f59e0b"
+                                        aria-label="Amber"
+                                    ></button>
+                                    <button
+                                        class="color-dot"
+                                        data-color="#10b981"
+                                        style="background: #10b981"
+                                        aria-label="Green"
+                                    ></button>
+                                    <button
+                                        class="color-dot"
+                                        data-color="#3b82f6"
+                                        style="background: #3b82f6"
+                                        aria-label="Blue"
+                                    ></button>
+                                    <button
+                                        class="color-dot"
+                                        data-color="#ec4899"
+                                        style="background: #ec4899"
+                                        aria-label="Pink"
+                                    ></button>
+                                </div>
+                                <label class="field-label">Notes</label>
+                                <textarea
+                                    class="input"
+                                    id="entryNotes"
+                                    rows="2"
+                                    placeholder="Additional notes..."
+                                ></textarea>
+                                <input type="hidden" id="entryId" />
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    class="btn btn-ghost"
+                                    id="cancelEntryModal"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    id="saveEntryBtn"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vault entries list -->
+                    <div class="vault-entries" id="vaultEntries">
+                        <div class="empty-state" id="vaultEmpty">
+                            <svg
+                                width="48"
+                                height="48"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1"
+                                opacity="0.3"
+                            >
+                                <rect
+                                    x="3"
+                                    y="11"
+                                    width="18"
+                                    height="11"
+                                    rx="2"
+                                />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            <p>
+                                No entries yet. Click "Add Entry" to get
+                                started.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== TOTP TAB ==================== -->
+            <section class="tab-content" id="tab-totp">
+                <div class="tab-header">
+                    <h1>TOTP Authenticator</h1>
+                    <p class="subtitle">
+                        Time-based One-Time Password generator
+                    </p>
+                </div>
+
+                <div class="totp-toolbar">
+                    <button class="btn btn-primary" id="addTotpBtn">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Account
+                    </button>
+                </div>
+
+                <!-- Add TOTP Modal -->
+                <div class="modal-overlay hidden" id="totpModal">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3>Add TOTP Account</h3>
+                            <button
+                                class="modal-close"
+                                id="closeTotpModal"
+                                aria-label="Close"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label class="field-label">Account Name</label>
+                            <input
+                                type="text"
+                                class="input"
+                                id="totpName"
+                                placeholder="e.g. GitHub"
+                            />
+                            <label class="field-label">Issuer</label>
+                            <input
+                                type="text"
+                                class="input"
+                                id="totpIssuer"
+                                placeholder="e.g. github.com"
+                            />
+                            <label class="field-label"
+                                >Secret Key (Base32)</label
+                            >
+                            <input
+                                type="text"
+                                class="input"
+                                id="totpSecret"
+                                placeholder="JBSWY3DPEHPK3PXP"
+                                autocomplete="off"
+                            />
+                            <label class="field-label">Algorithm</label>
+                            <select class="input" id="totpAlgorithm">
+                                <option value="SHA-1" selected>SHA-1</option>
+                                <option value="SHA-256">SHA-256</option>
+                                <option value="SHA-512">SHA-512</option>
+                            </select>
+                            <label class="field-label">Digits</label>
+                            <select class="input" id="totpDigits">
+                                <option value="6" selected>6</option>
+                                <option value="8">8</option>
+                            </select>
+                            <label class="field-label">Period (seconds)</label>
+                            <input
+                                type="number"
+                                class="input"
+                                id="totpPeriod"
+                                value="30"
+                                min="10"
+                                max="120"
+                            />
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-ghost" id="cancelTotpModal">
+                                Cancel
+                            </button>
+                            <button class="btn btn-primary" id="saveTotpBtn">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="totp-list" id="totpList">
+                    <div class="empty-state" id="totpEmpty">
+                        <svg
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1"
+                            opacity="0.3"
+                        >
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <p>
+                            No TOTP accounts. Click "Add Account" to set up 2FA.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== PASSWORD GENERATOR TAB ==================== -->
+            <section class="tab-content" id="tab-password-gen">
+                <div class="tab-header">
+                    <h1>Password Generator</h1>
+                    <p class="subtitle">
+                        Create strong, customizable passwords
+                    </p>
+                </div>
+
+                <div class="panel">
+                    <div class="password-output">
+                        <div
+                            class="generated-password"
+                            id="generatedPassword"
+                            aria-live="polite"
+                        >
+                            Click "Generate" to create a password
+                        </div>
+                        <div class="password-output-actions">
+                            <button
+                                class="btn btn-icon"
+                                id="copyGenPassword"
+                                aria-label="Copy password"
+                            >
+                                <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <rect
+                                        x="9"
+                                        y="9"
+                                        width="13"
+                                        height="13"
+                                        rx="2"
+                                    />
+                                    <path
+                                        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                                    />
+                                </svg>
+                            </button>
+                            <button
+                                class="btn btn-icon"
+                                id="regeneratePassword"
+                                aria-label="Regenerate"
+                            >
+                                <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <polyline points="23 4 23 10 17 10" />
+                                    <path
+                                        d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="password-strength-bar">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <span class="strength-label" id="strengthLabel">—</span>
+
+                    <div class="gen-options">
+                        <div class="gen-option">
+                            <label class="field-label"
+                                >Length:
+                                <strong id="pwLengthVal">16</strong></label
+                            >
+                            <input
+                                type="range"
+                                id="pwLength"
+                                min="4"
+                                max="128"
+                                value="16"
+                                class="range-input"
+                            />
+                        </div>
+                        <label class="checkbox-label"
+                            ><input type="checkbox" id="pwUppercase" checked />
+                            Uppercase (A-Z)</label
+                        >
+                        <label class="checkbox-label"
+                            ><input type="checkbox" id="pwLowercase" checked />
+                            Lowercase (a-z)</label
+                        >
+                        <label class="checkbox-label"
+                            ><input type="checkbox" id="pwDigits" checked />
+                            Digits (0-9)</label
+                        >
+                        <label class="checkbox-label"
+                            ><input type="checkbox" id="pwSymbols" checked />
+                            Symbols (!@#$%...)</label
+                        >
+                        <label class="checkbox-label"
+                            ><input type="checkbox" id="pwAmbiguous" /> Exclude
+                            Ambiguous (0, O, l, 1, I)</label
+                        >
+                        <label class="checkbox-label"
+                            ><input type="checkbox" id="pwCustom" /> Custom
+                            Characters</label
+                        >
+                        <input
+                            type="text"
+                            class="input hidden"
+                            id="pwCustomChars"
+                            placeholder="Enter custom characters..."
+                        />
+
+                        <div class="gen-option">
+                            <label class="field-label">Password Type</label>
+                            <select class="input" id="pwType">
+                                <option value="random">Random</option>
+                                <option value="memorable">
+                                    Memorable (words)
+                                </option>
+                                <option value="pin">PIN</option>
+                            </select>
+                        </div>
+                        <div class="gen-option hidden" id="memorableOptions">
+                            <label class="field-label"
+                                >Word Count:
+                                <strong id="pwWordCountVal">4</strong></label
+                            >
+                            <input
+                                type="range"
+                                id="pwWordCount"
+                                min="2"
+                                max="10"
+                                value="4"
+                                class="range-input"
+                            />
+                            <label class="field-label">Separator</label>
+                            <input
+                                type="text"
+                                class="input"
+                                id="pwWordSeparator"
+                                value="-"
+                                maxlength="3"
+                            />
+                            <label class="checkbox-label"
+                                ><input
+                                    type="checkbox"
+                                    id="pwWordCapitalize"
+                                    checked
+                                />
+                                Capitalize Words</label
+                            >
+                        </div>
+                    </div>
+
+                    <button
+                        class="btn btn-primary full-width"
+                        id="generatePasswordBtn"
+                    >
+                        Generate Password
+                    </button>
+                </div>
+            </section>
+
+            <!-- ==================== HISTORY TAB ==================== -->
+            <section class="tab-content" id="tab-history">
+                <div class="tab-header">
+                    <h1>History</h1>
+                    <p class="subtitle">Previously generated QR codes</p>
+                </div>
+                <div class="history-toolbar">
+                    <button class="btn btn-ghost btn-danger" id="clearHistory">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <polyline points="3 6 5 6 21 6" />
+                            <path
+                                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                            />
+                        </svg>
+                        Clear All
+                    </button>
+                </div>
+                <div class="history-grid" id="historyGrid">
+                    <div class="empty-state" id="historyEmpty">
+                        <svg
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1"
+                            opacity="0.3"
+                        >
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <p>
+                            No history yet. Generate a QR code to see it here.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SETTINGS TAB ==================== -->
+            <section class="tab-content" id="tab-settings">
+                <div class="tab-header">
+                    <h1>Settings</h1>
+                    <p class="subtitle">Customize your Qryptix experience</p>
+                </div>
+                <div class="panel settings-panel">
+                    <div class="settings-group">
+                        <h3 class="section-title">Appearance</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Theme</span>
+                                <span class="setting-desc"
+                                    >Choose light or dark mode</span
+                                >
+                            </div>
+                            <select class="input input-sm" id="settingTheme">
+                                <option value="dark">Dark</option>
+                                <option value="light">Light</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Accent Color</span>
+                                <span class="setting-desc"
+                                    >Primary UI color</span
+                                >
+                            </div>
+                            <input
+                                type="color"
+                                id="settingAccent"
+                                value="#6366f1"
+                                class="color-input"
+                            />
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3 class="section-title">QR Defaults</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label"
+                                    >Default Error Correction</span
+                                >
+                            </div>
+                            <select
+                                class="input input-sm"
+                                id="settingDefaultEC"
+                            >
+                                <option value="L">Low</option>
+                                <option value="M" selected>Medium</option>
+                                <option value="Q">Quartile</option>
+                                <option value="H">High</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Default Size</span>
+                            </div>
+                            <input
+                                type="number"
+                                class="input input-sm"
+                                id="settingDefaultSize"
+                                value="400"
+                                min="128"
+                                max="1024"
+                                step="32"
+                            />
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Live Preview</span>
+                                <span class="setting-desc"
+                                    >Generate QR code as you type</span
+                                >
+                            </div>
+                            <label class="toggle">
+                                <input
+                                    type="checkbox"
+                                    id="settingLivePreview"
+                                    checked
+                                />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3 class="section-title">Vault</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label"
+                                    >Auto-lock Timeout (minutes)</span
+                                >
+                                <span class="setting-desc"
+                                    >Lock vault after inactivity</span
+                                >
+                            </div>
+                            <input
+                                type="number"
+                                class="input input-sm"
+                                id="settingAutoLock"
+                                value="5"
+                                min="1"
+                                max="60"
+                            />
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3 class="section-title">Data</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label"
+                                    >Export All Data</span
+                                >
+                                <span class="setting-desc"
+                                    >Download settings, history, and vault as
+                                    encrypted JSON</span
+                                >
+                            </div>
+                            <button
+                                class="btn btn-sm btn-primary"
+                                id="exportData"
+                            >
+                                Export
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Import Data</span>
+                            </div>
+                            <input
+                                type="file"
+                                id="importData"
+                                accept=".json"
+                                class="file-input"
+                            />
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label"
+                                    >Reset All Settings</span
+                                >
+                                <span class="setting-desc"
+                                    >Restore defaults (does not delete
+                                    vault)</span
+                                >
+                            </div>
+                            <button
+                                class="btn btn-sm btn-danger"
+                                id="resetSettings"
+                            >
+                                Reset
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label"
+                                    >Wipe Everything</span
+                                >
+                                <span class="setting-desc"
+                                    >Delete all data including vault
+                                    entries</span
+                                >
+                            </div>
+                            <button class="btn btn-sm btn-danger" id="wipeAll">
+                                Wipe All
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script src="assets/script.js"></script>
+    </body>
 </html>

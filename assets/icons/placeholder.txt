@@ -1,0 +1,2 @@
+Icons and assets directory for Qryptix.
+SVG icons are embedded inline in the HTML for performance.
